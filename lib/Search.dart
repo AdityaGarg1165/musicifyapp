@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:musicify_app/Songitem.dart';
+import 'package:musicify_app/fetcher.dart';
 import 'package:http/http.dart' as http;
 import 'package:musicify_app/main.dart';
 import 'dart:async';
@@ -15,13 +15,13 @@ class SearchPage extends StatefulWidget {
 }
 
 class _MyState extends State<SearchPage> {
-  List<dynamic> songs = [
-    {"name": "a"},
-    {"name": "a"},
-    {"name": "a"},
-    {"name": "a"},
-    {"name": "a"},
-    {"name": "a"}
+  List<dynamic> songs2 = [
+    {"name": "s"},
+    {"name": "2"},
+    {"name": ""},
+    {"name": ""},
+    {"name": ""},
+    {"name": ""},
   ];
   // String searched = "";
   // List<String>
@@ -54,35 +54,23 @@ class _MyState extends State<SearchPage> {
                                         "d3ba863d303c401c84b3e8dca435704b"))
                           },
                           body: "grant_type=client_credentials");
-                      // finalProvider.UpdateSearch(value);
+
                       setState(() {
-                        // searched = value;
                         finalProvider.setAccessToken(
                             jsonDecode(res.body)['access_token']);
-                        // print(accessToken);
-                        // print(value);
-                        // searched = "sd";
-                      });
-                      print(songs);
-                    },
-                    onChanged: (value) async {
-                      var url = "https://api.spotify.com/v1/search?q=" +
-                          value +
-                          "&type=album&limit=4";
-                      var res = await http.get(
-                        Uri.parse(url),
-                        headers: <String, String>{
-                          'Authorization': "Bearer " + finalProvider.AccessToken
-                        },
-                      );
-                      // if (value != null) {
-                      setState(() {
-                        songs = jsonDecode(res.body)['albums']['items'];
+                        print(finalProvider.AccessToken);
                       });
                       // print(songs);
-                      // }
-                      // finalProvider
-                      //     .setSongs(jsonDecode(res.body)['albums']['items']);
+                    },
+                    onChanged: (value) async {
+                      var dat =
+                          await Fetcher().get(value, finalProvider.AccessToken);
+                      // print(finalProvider.song_list[0]['name']);
+                      finalProvider.setSongs(dat);
+                      setState(() {
+                        songs2 = finalProvider.song_list;
+                      });
+
                       // print(finalProvider.song_list);
                     },
                     cursorColor: Color.fromRGBO(147, 43, 222, 1),
@@ -96,13 +84,22 @@ class _MyState extends State<SearchPage> {
                             borderSide: BorderSide.none),
                         suffixIcon: const Icon(Icons.search))))),
 
-        // ListView.builder(
-        //     itemBuilder: ((context, index) {
-        //       return Row(
-        //         children: [Text(songs[index]['name'])],
-        //       );
-        //     }),
-        //     itemCount: 5)
+        Container(
+          padding: EdgeInsets.all(120),
+          child: ListView.builder(
+              itemBuilder: ((context, index) {
+                return Row(
+                  children: [
+                    Text(
+                      songs2[index]['name']!,
+                      style: TextStyle(color: Colors.white),
+                    )
+                  ],
+                );
+              }),
+              itemCount: 5),
+        )
+
         // SongItem(q: finalProvider.searchText)
       ]),
     );

@@ -14,7 +14,14 @@ class SpotifyApiState with ChangeNotifier {
   String get searchText => _searchText;
   String access_token = "";
   String get AccessToken => access_token;
-  List<dynamic> songs = [];
+  List<dynamic> songs = [
+    {"name": "s"},
+    {"name": ""},
+    {"name": ""},
+    {"name": ""},
+    {"name": ""},
+    {"name": ""},
+  ];
   List<dynamic> get song_list => songs;
   // String songs = [];
 
