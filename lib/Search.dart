@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:musicify_app/SongItem.dart';
 import 'package:musicify_app/fetcher.dart';
 import 'package:http/http.dart' as http;
 import 'package:musicify_app/main.dart';
@@ -16,12 +17,42 @@ class SearchPage extends StatefulWidget {
 
 class _MyState extends State<SearchPage> {
   List<dynamic> songs2 = [
-    {"name": "s"},
-    {"name": "2"},
-    {"name": ""},
-    {"name": ""},
-    {"name": ""},
-    {"name": ""},
+    {
+      "name": " ",
+      "images": [
+        {"url": "https://clothingify.vercel.app/Untitled%20design.png"}
+      ]
+    },
+    {
+      "name": " ",
+      "images": [
+        {"url": "https://clothingify.vercel.app/Untitled%20design.png"}
+      ]
+    },
+    {
+      "name": " ",
+      "images": [
+        {"url": "https://clothingify.vercel.app/Untitled%20design.png"}
+      ]
+    },
+    {
+      "name": " ",
+      "images": [
+        {"url": "https://clothingify.vercel.app/Untitled%20design.png"}
+      ]
+    },
+    {
+      "name": " ",
+      "images": [
+        {"url": "https://clothingify.vercel.app/Untitled%20design.png"}
+      ]
+    },
+    {
+      "name": " ",
+      "images": [
+        {"url": "https://clothingify.vercel.app/Untitled%20design.png"}
+      ]
+    },
   ];
   // String searched = "";
   // List<String>
@@ -63,13 +94,19 @@ class _MyState extends State<SearchPage> {
                       // print(songs);
                     },
                     onChanged: (value) async {
-                      var dat =
-                          await Fetcher().get(value, finalProvider.AccessToken);
-                      // print(finalProvider.song_list[0]['name']);
-                      finalProvider.setSongs(dat);
-                      setState(() {
-                        songs2 = finalProvider.song_list;
-                      });
+                      if (value.isNotEmpty) {
+                        var dat = await Fetcher()
+                            .get(value, finalProvider.AccessToken);
+
+                        // var ims = await Fetcher()
+                        //     .images(value, finalProvider.AccessToken);
+                        // print(ims);
+                        // print(finalProvider.song_list);
+                        finalProvider.setSongs(dat);
+                        setState(() {
+                          songs2 = finalProvider.song_list;
+                        });
+                      }
 
                       // print(finalProvider.song_list);
                     },
@@ -85,15 +122,24 @@ class _MyState extends State<SearchPage> {
                         suffixIcon: const Icon(Icons.search))))),
 
         Container(
-          padding: EdgeInsets.all(120),
+          padding: EdgeInsets.fromLTRB(10, 100, 0, 0),
           child: ListView.builder(
               itemBuilder: ((context, index) {
                 return Row(
                   children: [
-                    Text(
-                      songs2[index]['name']!,
-                      style: TextStyle(color: Colors.white),
-                    )
+                    Flexible(
+                      //     child: Text(
+                      //   songs2[index]['name']!,
+                      //   style: TextStyle(color: Colors.white),
+                      // )
+                      child: SongItem(
+                          name1: songs2[index]['name'],
+                          url: songs2[index]['images'][0]['url']),
+                    ),
+                    SizedBox(
+                      height: 80,
+                      width: 12,
+                    ),
                   ],
                 );
               }),

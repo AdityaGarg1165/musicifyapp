@@ -22,11 +22,25 @@ class Fetcher {
       // print("body");
       // print(body);
       var items = body['albums']['items'];
+      // print(items[0]['images']);
       // print(accessToken == "d");
 
       // return [];
       return items;
     }
+
     // return ["{}, ];
+  }
+
+  Future<bool> empty() async {
+    var res = await http.get(
+        Uri.parse("https://api.spotify.com/v1/search?q=&type=album"),
+        headers: <String, String>{'Authorization': "Bearer "});
+
+    if (res != null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
